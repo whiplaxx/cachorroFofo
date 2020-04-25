@@ -13,30 +13,26 @@ import low_functions
 
 #🗿
 #🖕
-    
+
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
 
     async def on_message(self, message):
+        
         # don't respond to ourselves
         if message.author == self.user:
             return
 
         if message.content == 'ping':
             await message.channel.send('pong')
-        
-        # biel
-        if message.author.id == 247810079024349194:
-            emoji = "🗿"
-            await message.add_reaction(emoji)
-        
-        if message.author.id == 121433172704493568:
-            emoji = "🤪"
-            await message.add_reaction(emoji)
 
-#        if low_functions.startsWith(message.content, "?help"):
-#            await message.channel.send("'-'")
+"""
+- add reaction to message:
+    emoji = "🤪"
+    await message.add_reaction(emoji)
+
+"""
 
 client = MyClient()
 client.run('Mzk4MDE0MDI5NTI1ODExMjAw.XqEj8g.fOb09RXhLzDhShL-ceINzghA0p8')

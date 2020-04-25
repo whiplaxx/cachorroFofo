@@ -35,4 +35,4 @@ class MyClient(discord.Client):
 """
 
 client = MyClient()
-client.run('Mzk4MDE0MDI5NTI1ODExMjAw.XqEj8g.fOb09RXhLzDhShL-ceINzghA0p8')
+client.run('token do pai')

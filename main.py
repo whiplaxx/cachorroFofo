@@ -1,15 +1,14 @@
 import discord
 
+from asyncio import sleep
+
 from os import path as p
 CURRENT_DIR = p.dirname(p.realpath(__file__))
 from sys import path
 path.append(CURRENT_DIR)
 
 import low_functions
-
-#alex = 277581722357465088
-#kashmir = 298975463219396608
-#biel = 247810079024349194
+import functions
 
 #🗿
 #🖕
@@ -17,6 +16,7 @@ import low_functions
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
+        self.prefixo = '?'
 
     async def on_message(self, message):
         
@@ -24,8 +24,11 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
-        if message.content == 'ping':
-            await message.channel.send('pong')
+        if low_functions.startsWith(message.content, self.prefixo):
+            
+            content = ( ( message.content )[1:len(message.content)] ).split(" ")
+            await functions.handle(self, message, content)
+
 
 """
 - add reaction to message:
@@ -34,5 +37,10 @@ class MyClient(discord.Client):
 
 """
 
-client = MyClient()
-client.run('Mzk4MDE0MDI5NTI1ODExMjAw.XqEj8g.fOb09RXhLzDhShL-ceINzghA0p8')
+if __name__ == "__main__":
+    tokenFile = open("botToken", 'r')
+    token = tokenFile.read().replace('\n', '')
+    tokenFile.close()
+
+    client = MyClient()
+    client.run(token)

@@ -18,16 +18,18 @@ class MyClient(discord.Client):
         print('Logged on as', self.user)
         self.prefixo = '?'
 
+
     async def on_message(self, message):
         
         # don't respond to ourselves
         if message.author == self.user:
             return
 
-        if low_functions.startsWith(message.content, self.prefixo):
+        if message.content.startswith(self.prefixo):
             
             content = ( ( message.content )[1:len(message.content)] ).split(" ")
-            await functions.handle(self, message, content)
+            if len(content) > 0:
+                await functions.handle(self, message, content)
 
 
 """

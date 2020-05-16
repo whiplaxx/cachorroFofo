@@ -71,14 +71,47 @@ async def avatar(f_client, message, content):
 
         await message.channel.send(urls)
 
+async def link(f_client, message, content):
 
+    for i in content:
+        if ';' in i:
+            await message.channel.send( "sem ponto e virgula" )
+            return
+    
+    try:
+        link_key = content[1]
+
+        link_content = read.readFile('links', DATA_DIR, link_key )
+        if link_content  != False:
+            await message.channel.send( link_content[0][1] )
+            return
+        else:
+            print(read.ERROR_MESSAGE[read.ERROR_LOG])
+
+    except:
+        await message.channel.send( "deu n" )
+        return
+    
+    link_content = ""
+    for i in range(2, len(content) ):
+        link_content += content[i]
+
+    if len(link_content) >= 100:
+        await message.channel.send( "mt gtrande" )
+        return
+
+    link_list = [[ link_key, link_content]]
+
+
+    read.writeFile( link_list, 'links', DATA_DIR, separator=';')
 
 # COMMANDS DIC
 commands = {
     "ajuda": [sendHelp, "Lista todos os comandos"],
     "convite": [invite, "Link do convite do cachorro fofo"],
     "wait": [wait, "espera N segundos"],
-    "avatar": [avatar, "pega o avatar de alguem"]
+    "avatar": [avatar, "pega o avatar de alguem"],
+    "link": [link, "cria link de um texto. link tem que se uma palavra so e nada pode te ponto e virugla. Ex: ?link eae / eae bom"]
 }
 
 # HANDLE MESSAGE CHATS WITH THE BOT PREFIX
@@ -89,4 +122,5 @@ async def handle(f_client, message, content):
     try:
         await commands[ command ][0]( f_client, message, content )
     except:
-        await message.channel.send("?ajuda")
+        if command != '' and command != ' ' and command[0] != '?':
+            await message.channel.send("?ajuda")

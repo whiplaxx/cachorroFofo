@@ -13,7 +13,7 @@ import read
 DATA_DIR = CURRENT_DIR + "\\data\\"
 
 # BOT'S ID
-client_id = 398014029525811200
+client_id = 713510650760003697
 
 # LIST ALL COMMANDS
 async def sendHelp(f_client, message, content):
@@ -29,7 +29,7 @@ async def sendHelp(f_client, message, content):
 # SEND BOT'S INVITE LINK
 async def invite(f_client, message, content):
 
-    await message.channel.send("https://discordapp.com/oauth2/authorize?client_id=" + str(client_id) + "&scope=bot&permissions=8")
+    await message.channel.send("https://discord.com/api/oauth2/authorize?client_id=" + str(client_id) + "&permissions=8&scope=bot")
 
 # WAIT N SECONDS
 async def wait(f_client, message, content):
@@ -95,15 +95,40 @@ async def link(f_client, message, content):
     link_content = ""
     for i in range(2, len(content) ):
         link_content += content[i]
-
-    if len(link_content) >= 100:
+    
+    if len(link_content) == 0:
+        await message.channel.send( "conteudo vazio ou link nao existe" )
+        return
+    elif len(link_content) >= 100:
         await message.channel.send( "mt gtrande" )
         return
 
     link_list = [[ link_key, link_content]]
 
-
     read.writeFile( link_list, 'links', DATA_DIR, separator=';')
+
+async def chamada(f_client, message, content):
+
+    author_id = message.author.id
+
+    if author_id not in waitingCommand:
+        waitingCommand.append(message.author.id)
+    
+    if author_id == 277581722357465088:
+        await message.channel.send("Sim, mestre?")
+    else:
+        await message.channel.send("Sim, noob?")
+
+    for i in range(0, 10):
+        await asyncio.sleep( 1 )
+
+        if author_id not in waitingCommand:
+            break
+
+    try:
+        waitingCommand.remove(author_id)
+    except:
+        pass
 
 # COMMANDS DIC
 commands = {
@@ -114,13 +139,17 @@ commands = {
     "link": [link, "cria link de um texto. link tem que se uma palavra so e nada pode te ponto e virugla. Ex: ?link eae / eae bom"]
 }
 
+waitingCommand = []
+
 # HANDLE MESSAGE CHATS WITH THE BOT PREFIX
 async def handle(f_client, message, content):
 
-    command = content[0]
-
-    try:
+    command = str(content[0])
+    
+    if command in commands.keys():
         await commands[ command ][0]( f_client, message, content )
-    except:
-        if command != '' and command != ' ' and command[0] != '?':
-            await message.channel.send("?ajuda")
+    else:
+        if command == '' or command == ' ':
+            await chamada( f_client, message, content )
+        else:
+            await message.channel.send("pane no sistema alguem me desconfiguro")

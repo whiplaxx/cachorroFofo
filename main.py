@@ -16,7 +16,7 @@ import functions
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
-        self.prefixo = '?'
+        self.prefixo = "computador"
 
 
     async def on_message(self, message):
@@ -25,19 +25,20 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
-        if message.content.startswith(self.prefixo):
-            
-            content = ( ( message.content )[1:len(message.content)] ).split(" ")
-            if len(content) > 0:
+        if message.author.id in functions.waitingCommand:
+            functions.waitingCommand.remove(message.author.id)
+
+            content = ( message.content ).split(" ")
+
+            if message.content.startswith(self.prefixo):
+                content = content[1:len(content)]
+            await functions.handle(self, message, content)
+        
+        else:
+            if message.content.startswith(self.prefixo):
+                
+                content = ( ( message.content )[ len(self.prefixo)+1 :len(message.content)] ).split(" ")
                 await functions.handle(self, message, content)
-
-
-"""
-- add reaction to message:
-    emoji = "🤪"
-    await message.add_reaction(emoji)
-
-"""
 
 if __name__ == "__main__":
     tokenFile = open("botToken", 'r')

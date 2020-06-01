@@ -160,7 +160,6 @@ commands = {
     ,"avatar": [avatar, "pega o avatar de alguem"]
     ,"link": [link, "cria link de um texto. link tem que se uma palavra so e nada pode te ponto e virugla. Ex: ?link eae / eae bom"]
     ,"tweet": [tweet, "pega um tweet random do user passado"]
-    ,"emote": [post_emote, "asdfjasd"]
 }
 
 waitingCommand = []
